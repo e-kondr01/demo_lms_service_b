@@ -1,4 +1,6 @@
 from fastapi_sqlalchemy_toolkit import ModelManager
 
-# Create new managers like this:
-# item_manager = ModelManager[Item, CreateItemSchema, UpdateItemSchema](Item)
+from app.models import Student
+from app.schemas import StudentSchema
+
+student_manager = ModelManager[Student, StudentSchema, StudentSchema](Student)
