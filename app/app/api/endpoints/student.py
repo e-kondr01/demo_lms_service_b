@@ -13,9 +13,12 @@ router = APIRouter()
 
 
 @router.get("")
-async def get_students(session: Session, ids: comma_list_query) -> list[StudentSchema]:
-    return await student_manager.filter(
+async def get_students(
+    session: Session, ids: comma_list_query, institution_id: UUID | None = None
+) -> list[StudentSchema]:
+    return await student_manager.list(
         session,
+        institution_id=institution_id,
         where=(Student.id.in_(get_comma_list_values(ids, UUID))),
         options=joinedload(Student.institution),
     )
