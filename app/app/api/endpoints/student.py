@@ -6,7 +6,6 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from app.api.deps import Session
-from app.managers import student_manager
 from app.models import Student
 from app.schemas import StudentSchema
 
