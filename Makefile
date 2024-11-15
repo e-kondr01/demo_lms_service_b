@@ -15,7 +15,7 @@ run: up
 local:
 	docker compose -f local-docker-compose.yml up -d --build
 	cd app; alembic upgrade head; \
-	uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
+	uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 
 .PHONY: migrations
 migrations:
