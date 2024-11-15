@@ -31,7 +31,7 @@ async def get_students(
 
 
 @router.get("/ids")
-async def get_students_for_paginated_assessments(
+async def get_student_ids(
     session: Session,
     ids: comma_list_query,
     institution_id: UUID | None = None,
