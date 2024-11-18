@@ -4,5 +4,5 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.models import Base
 
 
-class Institution(Base):
+class ServiceBInstitution(Base):
     name: Mapped[str] = mapped_column(String(255))

@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from app.api.deps import Session
-from app.models import Student
+from app.models import ServiceBStudent
 from app.schemas import StudentSchema
 
 router = APIRouter()
@@ -20,9 +20,9 @@ async def get_students(
     limit: int = 20,
 ) -> list[StudentSchema]:
     stmt = (
-        select(Student)
-        .where(Student.id.in_(get_comma_list_values(ids, UUID)))
-        .options(joinedload(Student.institution))
+        select(ServiceBStudent)
+        .where(ServiceBStudent.id.in_(get_comma_list_values(ids, UUID)))
+        .options(joinedload(ServiceBStudent.institution))
         .limit(limit)
     )
     if institution_id:
@@ -39,7 +39,8 @@ async def get_student_ids(
     ids_list = get_comma_list_values(ids, UUID)
     if not institution_id or not ids:
         return ids_list
-    stmt = select(Student.id).where(
-        Student.institution_id == institution_id, Student.id.in_(ids_list)
+    stmt = select(ServiceBStudent.id).where(
+        ServiceBStudent.institution_id == institution_id,
+        ServiceBStudent.id.in_(ids_list),
     )
     return (await session.execute(stmt)).scalars().all()

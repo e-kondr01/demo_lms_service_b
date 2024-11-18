@@ -4,44 +4,52 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import async_session_factory
-from app.models import Institution, Student
+from app.models import ServiceBInstitution, ServiceBStudent
 
 
 async def generate_institutions(session: AsyncSession):
     institution_names = ("ИТМО", "ТюмГУ", "Политех", "ФТМИ")
     for name in institution_names:
-        institution = Institution(name=name)
+        institution = ServiceBInstitution(name=name)
         session.add(institution)
     await session.commit()
 
 
 async def generate_students(session: AsyncSession):
     institution = (
-        await session.execute(select(Institution).filter_by(name="ИТМО"))
+        await session.execute(select(ServiceBInstitution).filter_by(name="ИТМО"))
     ).scalar_one()
     for i in range(200):
-        student = Student(name=f"Студент ИТМО {i+1}", institution_id=institution.id)
+        student = ServiceBStudent(
+            name=f"Студент ИТМО {i+1}", institution_id=institution.id
+        )
         session.add(student)
 
     institution = (
-        await session.execute(select(Institution).filter_by(name="ТюмГУ"))
+        await session.execute(select(ServiceBInstitution).filter_by(name="ТюмГУ"))
     ).scalar_one()
     for i in range(100):
-        student = Student(name=f"Студент ТюмГУ {i+1}", institution_id=institution.id)
+        student = ServiceBStudent(
+            name=f"Студент ТюмГУ {i+1}", institution_id=institution.id
+        )
         session.add(student)
 
     institution = (
-        await session.execute(select(Institution).filter_by(name="Политех"))
+        await session.execute(select(ServiceBInstitution).filter_by(name="Политех"))
     ).scalar_one()
     for i in range(180):
-        student = Student(name=f"Студент Политеха {i+1}", institution_id=institution.id)
+        student = ServiceBStudent(
+            name=f"Студент Политеха {i+1}", institution_id=institution.id
+        )
         session.add(student)
 
     institution = (
-        await session.execute(select(Institution).filter_by(name="ФТМИ"))
+        await session.execute(select(ServiceBInstitution).filter_by(name="ФТМИ"))
     ).scalar_one()
     for i in range(230):
-        student = Student(name=f"Студент ФТМИ {i+1}", institution_id=institution.id)
+        student = ServiceBStudent(
+            name=f"Студент ФТМИ {i+1}", institution_id=institution.id
+        )
         session.add(student)
 
     await session.commit()

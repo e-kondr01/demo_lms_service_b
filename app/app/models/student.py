@@ -7,13 +7,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models import Base
 
 if TYPE_CHECKING:
-    from app.models.institution import Institution
+    from app.models.institution import ServiceBInstitution
 
 
-class Student(Base):
+class ServiceBStudent(Base):
     name: Mapped[str] = mapped_column(String(63))
 
     institution_id: Mapped[UUID] = mapped_column(
-        ForeignKey("institution.id"), index=True
+        ForeignKey("servicebinstitution.id"), index=True
     )
-    institution: Mapped["Institution"] = relationship()
+    institution: Mapped["ServiceBInstitution"] = relationship()
