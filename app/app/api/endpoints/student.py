@@ -35,7 +35,7 @@ async def get_student_ids(
     session: Session, in_obj: StudentIDRequestBodySchema
 ) -> list[UUID]:
     ids_list = get_comma_list_values(in_obj.ids, UUID)
-    if not in_obj.institution_id or not in_obj.ids:
+    if not in_obj.institution_id and not in_obj.ids:
         return ids_list
     stmt = select(ServiceBStudent.id).order_by(ServiceBStudent.created_at)
     if in_obj.ids:
