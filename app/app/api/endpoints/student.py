@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 
 from app.api.deps import Session
 from app.models import ServiceBStudent
-from app.schemas import StudentSchema
+from app.schemas import StudentIDRequestBodySchema, StudentSchema
 
 router = APIRouter()
 
@@ -30,17 +30,15 @@ async def get_students(
     return (await session.execute(stmt)).scalars().all()  # type: ignore
 
 
-@router.get("/ids")
+@router.post("/ids")
 async def get_student_ids(
-    session: Session,
-    ids: comma_list_query,
-    institution_id: UUID | None = None,
+    session: Session, in_obj: StudentIDRequestBodySchema
 ) -> list[UUID]:
-    ids_list = get_comma_list_values(ids, UUID)
-    if not institution_id or not ids:
+    ids_list = get_comma_list_values(in_obj.ids, UUID)
+    if not in_obj.institution_id or not in_obj.ids:
         return ids_list
     stmt = select(ServiceBStudent.id).where(
-        ServiceBStudent.institution_id == institution_id,
+        ServiceBStudent.institution_id == in_obj.institution_id,
         ServiceBStudent.id.in_(ids_list),
     )
     return (await session.execute(stmt)).scalars().all()
