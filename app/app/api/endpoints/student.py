@@ -37,7 +37,7 @@ async def get_student_ids(
     ids_list = get_comma_list_values(in_obj.ids, UUID)
     if not in_obj.institution_id or not in_obj.ids:
         return ids_list
-    stmt = select(ServiceBStudent.id)
+    stmt = select(ServiceBStudent.id).order_by(ServiceBStudent.created_at)
     if in_obj.ids:
         stmt = stmt.where(ServiceBStudent.id.in_(ids_list))
     if in_obj.institution_id:
