@@ -37,8 +37,9 @@ async def get_student_ids(
     ids_list = get_comma_list_values(in_obj.ids, UUID)
     if not in_obj.institution_id or not in_obj.ids:
         return ids_list
-    stmt = select(ServiceBStudent.id).where(
-        ServiceBStudent.institution_id == in_obj.institution_id,
-        ServiceBStudent.id.in_(ids_list),
-    )
+    stmt = select(ServiceBStudent.id)
+    if in_obj.ids:
+        stmt = stmt.where(ServiceBStudent.id.in_(ids_list))
+    if in_obj.institution_id:
+        stmt = stmt.where(ServiceBStudent.institution_id == in_obj.institution_id)
     return (await session.execute(stmt)).scalars().all()
