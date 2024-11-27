@@ -15,18 +15,19 @@ router = APIRouter()
 @router.get("")
 async def get_students(
     session: Session,
-    ids: comma_list_query,
+    ids: comma_list_query | None = None,
     institution_id: UUID | None = None,
     limit: int = 20,
 ) -> list[StudentSchema]:
     stmt = (
         select(ServiceBStudent)
-        .where(ServiceBStudent.id.in_(get_comma_list_values(ids, UUID)))
         .options(joinedload(ServiceBStudent.institution))
         .limit(limit)
     )
     if institution_id:
         stmt = stmt.filter_by(institution_id=institution_id)
+    if ids:
+        stmt = stmt.where(ServiceBStudent.id.in_(get_comma_list_values(ids, UUID)))
     return (await session.execute(stmt)).scalars().all()  # type: ignore
 
 
